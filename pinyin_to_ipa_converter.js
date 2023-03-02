@@ -1,7 +1,7 @@
 (function(main, global) {
 	(typeof exports == "object" ? exports : global).PinyinToIPA = main();
 })(function() {
-	
+
 	var regex = /(?:([zcs]h?|[bpmfdtnlgkhjqxr])((?:(?:(?:[aoe]|i[ao]?|ua)ng|(?:a|e|[iuü]a?)n)(?![aoeiuü])|a[oi]?|ou?|ei?|i(?:ao?|e|u)?|u(?:[oe]|a?i?)|üe?))|((?:(?:(?:[wy]?a|y?o|w?e|yi)ng|(?:w?[ae]|y(?:a|i|ua?))n)(?![aoeiuü])|a[oi]?|ou?|ei?|w(?:ai?|ei|o|u)|y(?:ao?|e|i|ou?|ue?))))(r(?![aoeiuü]))?([1-4])?/g;
 
 	var initialList = {
@@ -69,17 +69,17 @@
 	];
 
 	return function(pinyin) {
-		
+
 		var output = [];
 		pinyin = pinyin.normalize("NFD").toLowerCase().replace(/v|ü/g, "ü");
 		var pinyin_notone = pinyin.replace(/[̄́̌̀]/g, "");
 		var pinyin_normalized = pinyin.normalize("NFC");
-		
+
 		pinyin_notone.replace(regex, function(match, initial, onsetFinal, zeroOnsetFinal, erhua, tone, index) {
-			
+
 			if (/^[jqx]$/.test(initial)) onsetFinal = onsetFinal.replace(/^u(a?n|e)?$/, "ü$1");
 			if (onsetFinal == "ue") onsetFinal = "üe";
-			
+
 			var syllable = zeroOnsetFinal
 				? finalList.find(function(element) {
 					return element[1] == zeroOnsetFinal;
@@ -93,13 +93,13 @@
 								return element[0] == onsetFinal;
 							})[2 + !!erhua];
 					})(initial.match(/^[zcs](h)?$/));
-			
+
 			output.push((function(searchTone) {
 				return (searchTone = searchTone ? "̄́̌̀".indexOf(searchTone[0]) + 1 : tone)
-					? syllable.replace(/([aäɑɔoəɚɤeɛiʊuy]̃?|[ɹɻ]̩)/, "$1" + "́̌̀̂".charAt(searchTone - 1))
+					? syllable.replace(/([aäɑɔoəɚɤeɛiʊuy]̃?|[ɹɻ]̩)/, "$1" + ["55","35","214","52"].charAt(searchTone - 1))
 					: syllable;
-			})(pinyin_normalized.substr(index, match.length).normalize("NFD").match(/[̄́̌̀]/)));
-			
+			})(pinyin_normalized.substr(index, match.length).normalize("NFD").match(/["55","35","214","52"]/)));
+
 		});
 		return output.join("<span>.</span><wbr>");
 	};
