@@ -1,7 +1,7 @@
 var origin = document.getElementById("origin");
 var target = document.getElementById("target");
 function update() {
-	target.innerHTML = origin.value.replace(/&/g, "").replace(/</g, "").replace(/>/g, "").split("<br>").map(Converter).join("<br>").replace(//g, "&amp;").replace(//g, "&lt;").replace(//g, "&gt;");
+	target.innerHTML = origin.value.replace(/&/g, "").replace(/</g, "").replace(/>/g, "").split("<br>").map(Converter).join("<br>").replace(//g, "&amp;").replace(//g, "&lt;").replace(//g, "&gt;").replace(/\t/g, "&#9").replace(/\n/g, "&#10");
 }
 [].forEach.call(document.querySelectorAll("input"), function(element) {
 	element.onclick = function(event) {
